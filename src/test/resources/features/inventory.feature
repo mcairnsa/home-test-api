@@ -1,12 +1,15 @@
 Feature: Inventory API tests
 
+# all of the example "items" here would be better with randomly generated values such as price, name, id, etc. This would help increase test
+# coverage and is closer to realistic calls to this API
+
   Background:
     # url defined in the config file
     url baseUrl
     # generates a unique id each run, would be good to break out into a separate asset
     * def newItem = { "id": "#('' + java.lang.System.currentTimeMillis())", "name": "Hawaiian", "price": "$14", "image": "hawaiian.png" }
 
-  # 1️⃣ Get all menu items
+  # 1: Get all menu items
   Scenario: Get all menu items
     Given url baseUrl + '/inventory'
     When method get
@@ -14,7 +17,7 @@ Feature: Inventory API tests
     And assert response.data.length >= 9
     And match each response.data contains { "id": "#string", "name": "#string", "price": "#string", "image": "#string" }
 
-  # 2️⃣ Filter by id
+  # 2: Filter by id
   Scenario: Filter inventory by id
     Given url baseUrl + '/inventory/filter'
     And param id = 3
@@ -23,7 +26,7 @@ Feature: Inventory API tests
     # can be broken out into separate asset
     And match response == { "id": "3", "name": "Baked Rolls x 8", "price": "$10", "image": "roll.png" }
 
-  # 3️⃣ Add item with new id
+  # 3: Add item with new id
   Scenario: Add new inventory item
     Given url baseUrl + '/inventory/add'
     #break out into independant json
@@ -31,7 +34,8 @@ Feature: Inventory API tests
     When method POST
     Then status 200
 
-  # 4️⃣ Add item with existing id
+  # 4: Add item with existing id
+  # a generic post call should be created if duplicated more times with the same item
   Scenario: Add duplicate inventory item
     Given url baseUrl + '/inventory/add'
     And request newItem
@@ -41,7 +45,7 @@ Feature: Inventory API tests
     When method POST
     Then status 400
 
-  # 5️⃣ Add item with missing info
+  # 5: Add item with missing info
   Scenario: Add item with missing data
     Given url baseUrl + '/inventory/add'
     # missing id and image
@@ -50,7 +54,9 @@ Feature: Inventory API tests
     Then status 400
     And match response == 'Not all requirements are met'
 
-  # 6️⃣ Verify recently added item is present
+  # 6: Verify recently added item is present
+  # improvements here would be to make the data more generic so more checks can be done with the response data instead of having a 
+  # hard-coded check
   Scenario: Verify new item in inventory
     Given url baseUrl + '/inventory'
     When method get
