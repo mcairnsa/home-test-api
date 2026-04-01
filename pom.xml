@@ -15,7 +15,6 @@
     </properties>
 
     <dependencies>
-        <!-- ✅ io.karatelabs group only exists from 1.5.0 onwards -->
         <dependency>
             <groupId>io.karatelabs</groupId>
             <artifactId>karate-junit5</artifactId>
@@ -23,7 +22,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- ✅ JUnit 5 engine for Surefire test discovery -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
